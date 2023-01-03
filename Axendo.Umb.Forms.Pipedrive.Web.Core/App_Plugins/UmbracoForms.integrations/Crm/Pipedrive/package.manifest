@@ -1,0 +1,10 @@
+﻿{
+  "css": [ "" ],
+  "javascript": [
+    "~/App_Plugins/UmbracoForms.integrations/Crm/Pipedrive/Person/pipedrivefields.component.js",
+    "~/App_Plugins/UmbracoForms.integrations/Crm/Pipedrive/Person/pipedrive.resource.js",
+    "~/App_Plugins/UmbracoForms.integrations/Crm/Pipedrive/Lead/pipedrivefields.component.js",
+    "~/App_Plugins/UmbracoForms.integrations/Crm/Pipedrive/Lead/pipedrive.resource.js"
+
+  ]
+}

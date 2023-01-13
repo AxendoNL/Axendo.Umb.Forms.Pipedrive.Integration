@@ -10,6 +10,6 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Services
     {
         Task<IEnumerable<PersonField>> GetPersonFields();
 
-        Task<WorkflowStatus> PostPersonAndLead(Record record, List<MappedPersonField> mappedPersonFields, List<MappedLeadField> mappedLeadFields);
+        Task<PostResult<Person>> PostPerson(Record record, List<MappedPersonField> mappedPersonFields);
     }
 }

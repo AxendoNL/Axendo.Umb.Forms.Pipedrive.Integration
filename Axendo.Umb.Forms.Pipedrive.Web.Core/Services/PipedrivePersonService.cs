@@ -17,28 +17,23 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Services
     public class PipedrivePersonService : IPersonService
     {
         private readonly static HttpClient _httpClient = new HttpClient();
-        private readonly IFacadeConfiguration _configuration;
         private readonly ILogger _logger;
-        private readonly PipedriveLeadService _pipedriveLeadService;
+        private readonly IPipedriveBaseService _pipedriveBaseService;
 
-        private const string baseUrl = "https://api.pipedrive.com/v1/";
-
-
-        public PipedrivePersonService(IFacadeConfiguration configuration, ILogger logger)
+        public PipedrivePersonService(ILogger logger, IPipedriveBaseService pipedriveBaseService)
         {
-            _configuration = configuration;
             _logger = logger;
-            _pipedriveLeadService = new PipedriveLeadService(configuration, logger);
-            
+            _pipedriveBaseService = pipedriveBaseService;
         }
 
         public async Task<IEnumerable<PersonField>> GetPersonFields()
         {
             var personFields = new List<PersonField>();
 
-            if (GetApiKey(out string apiKey))
+            if (_pipedriveBaseService.GetApiKey(out string apiKey))
             {
-                var response = await _httpClient.GetAsync(new Uri(ApiUrl("personFields", apiKey)));
+                var url = _pipedriveBaseService.ApiUrl("personFields", apiKey);
+                var response = await _httpClient.GetAsync(new Uri(url));
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
@@ -62,10 +57,11 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Services
             return personFields.OrderBy(p => p.Name);
         }
 
-        public async Task<WorkflowStatus> PostPersonAndLead(Record record, List<MappedPersonField> mappedPersonFields, List<MappedLeadField> mappedLeadFields)
+        public async Task<PostResult<Person>> PostPerson(Record record, List<MappedPersonField> mappedPersonFields)
         {
+            PostResult<Person> personResult = new PostResult<Person>() { Status = PipedriveStatus.Success};
 
-            if (GetApiKey(out string apiKey))
+            if (_pipedriveBaseService.GetApiKey(out string apiKey))
             {
 
                 var data = new JObject();
@@ -80,81 +76,51 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Services
                     else
                     {
                         _logger.Warn<PipedrivePersonService>("The mapping form field did not match any recordField. Check if sensitive data is turned off.");
-                        return WorkflowStatus.NotConfigured;
+                        personResult.Status = PipedriveStatus.NotConfigured;
+                        
+                        return personResult;
 
                     }
                 }
 
                 var email = data.GetValue("email").ToString();
-
-                if (await CheckIfEmailExists(email).ConfigureAwait(false))
+                
+                var personItems = await SearchPersonsByEmail(email).ConfigureAwait(false);
+                var existingPersons = personItems.Where(p => p.Person.Email== email);
+                
+                if (!existingPersons.Any())
                 {
-                    var url = ApiUrl("persons", apiKey);
+                    var url = _pipedriveBaseService.ApiUrl("persons", apiKey);
                     var response = await _httpClient.PostAsJsonAsync(url, data).ConfigureAwait(false);
 
 
                     if (response.IsSuccessStatusCode == false)
                     {
-                        _logger.Error<PipedrivePersonService>("Error submitting a Pipedrive person request ");
+                        _logger.Error<PipedrivePersonService>("Error submitting a Pipedrive person request. {Message}", response.ReasonPhrase);
+                        personResult.Status = PipedriveStatus.Failed;
 
-                        return WorkflowStatus.Failed;
+                        return personResult;
+
                     }
 
                     var result = await response.Content.ReadAsStringAsync();
                     var personJson = JsonConvert.DeserializeObject<PersonResponse>(result);
-                    var person = personJson.Person;
-
-                    if (person != null)
-                    {
-                        return await _pipedriveLeadService.PostLead(record, mappedLeadFields, person.Id);
-                    }
-                    else
-                    {
-                        _logger.Warn<PipedrivePersonService>("No person found with the given Id!");
-                        return WorkflowStatus.Failed;
-                    }
-
+                    personResult.Result = personJson.Person;
                 }
                 else
                 {
                     var personItemList = await SearchPersonsByEmail(email);
-
-                    
-                    foreach(var personItem in personItemList)
-                    {
-                        var personId = personItem.Person.Id;
-                        return await _pipedriveLeadService.PostLead(record, mappedLeadFields, personId);
-                    }
-                }
-
-             }
-
-            return WorkflowStatus.Success;
-        }
-
-        public async Task<bool> CheckIfEmailExists(string email)
-        {
-
-            bool result = true;
-            var persons = await SearchPersonsByEmail(email).ConfigureAwait(false);
-
-
-            foreach (var person in persons)
-            {
-                if (email == person.Person.Email)
-                {
-                    
-                    result =  false;
+                  
+                    personResult.Result =  personItemList.First().Person;
                 }
             }
-            return result;
+            return personResult;
         }
-
         public async Task<IEnumerable<PersonItem>> SearchPersonsByEmail(string email)
         {
             var persons = new List<PersonItem>();
 
-            if (GetApiKey(out string apiKey))
+            if (_pipedriveBaseService.GetApiKey(out string apiKey))
             {
                 Dictionary<string, string> queryParams = new Dictionary<string, string>()
                 { 
@@ -162,7 +128,7 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Services
                     {"fields","email" },
                     {"exact_match", "true"}
                 };
-                var url = SetupApiUrlWithQueryParams("persons/search", queryParams, apiKey);
+                var url = _pipedriveBaseService.SetupApiUrlWithQueryParams("persons/search", queryParams, apiKey);
                 var response = await _httpClient.GetAsync(url).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
@@ -185,31 +151,6 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Services
             }
 
             return persons;
-
-        }
-
-        private bool GetApiKey(out string apiKey)
-        {
-            apiKey = _configuration.GetSetting("PipedriveApiKey");
-            if (string.IsNullOrEmpty(apiKey))
-            {
-                _logger.Warn<PipedrivePersonService>("Api token cannot be null or empty");
-            }
-            return true;
-
-        }
-        private string ApiUrl(string path, string apiKey)
-        {
-            
-            return $"{baseUrl}{path}?api_token={apiKey}";
-        }
-
-        private string SetupApiUrlWithQueryParams(string path, Dictionary<string, string> queryParams, string apiKey)
-        {
-            var queryString = queryParams != null && queryParams.Any() ? string.Join("&", queryParams.Select(q => $"{q.Key}={q.Value}")) : null;
-
-            return $"{baseUrl}{path}?{queryString}&api_token={apiKey}";
-
         }
     }
 }

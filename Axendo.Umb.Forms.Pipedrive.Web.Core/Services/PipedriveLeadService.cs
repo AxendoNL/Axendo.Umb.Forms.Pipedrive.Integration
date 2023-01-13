@@ -10,27 +10,29 @@ using Axendo.Umb.Forms.Pipedrive.Web.Core.Models;
 using Axendo.Umb.Forms.Pipedrive.Web.Core.Models.Responses.LeadResponses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Axendo.Umb.Forms.Pipedrive.Web.Core.Models.Responses;
 
 namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Services
 {
     public class PipedriveLeadService : ILeadService
     {
         private readonly static HttpClient _httpClient = new HttpClient();
-        private readonly IFacadeConfiguration _configuration;
+        private readonly IPipedriveBaseService _pipedriveBaseService;
         private readonly ILogger _logger;
 
-        public PipedriveLeadService(IFacadeConfiguration facadeConfiguration, ILogger logger)
+        public PipedriveLeadService(IPipedriveBaseService pipedriveBaseService,ILogger logger)
         {
-            _configuration = facadeConfiguration;
+            _pipedriveBaseService = pipedriveBaseService;
             _logger = logger;
         }
         public async Task<IEnumerable<LeadField>> GetLeadFields()
         {
             var leadFields = new List<LeadField>();
 
-            if (GetApiKey(out string apiKey))
+            if (_pipedriveBaseService.GetApiKey(out string apiKey))
             {
-                var response = await _httpClient.GetAsync(new Uri(ApiUrl("dealFields", apiKey)));
+                var url = _pipedriveBaseService.ApiUrl("dealFields", apiKey);
+                var response = await _httpClient.GetAsync(new Uri(url));
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
@@ -54,9 +56,11 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Services
             return leadFields.OrderBy(p => p.Name);
         }
 
-        public async Task<WorkflowStatus> PostLead(Record record, List<MappedLeadField> mappedLeadFields, int personId)
+        public async Task<PostResult> PostLead(Record record, List<MappedLeadField> mappedLeadFields, int personId)
         {
-            if (GetApiKey(out string apiKey))
+            PostResult leadResult = new PostResult() { Status = PipedriveStatus.Success };
+            
+            if (_pipedriveBaseService.GetApiKey(out string apiKey))
             {
 
                 var data = new JObject();
@@ -71,46 +75,30 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Services
                     else
                     {
                         _logger.Warn<PipedrivePersonService>("The mapping form field did not match any recordField. Check if sensitive data is turned off.");
-                        return WorkflowStatus.NotConfigured;
+                        leadResult.Status =  PipedriveStatus.NotConfigured;
+
+                        return leadResult;
 
                     }
                 }
 
                 data.Add("person_id", personId);
 
-                var url = ApiUrl("leads", apiKey);
+                var url = _pipedriveBaseService.ApiUrl("leads", apiKey);
                 var response = await _httpClient.PostAsJsonAsync(url, data).ConfigureAwait(false);
 
 
                 if (response.IsSuccessStatusCode == false)
                 {
-                    _logger.Error<PipedrivePersonService>("Error submitting a Pipedrive person request ");
+                    _logger.Error<PipedrivePersonService>("Error submitting a Pipedrive person request. {Statuscode}, {Message}", response.StatusCode, response.ReasonPhrase);
+                    leadResult.Status = PipedriveStatus.Failed;
 
-                    return WorkflowStatus.Failed;
+                    return leadResult;
+                    
                 }
 
             }
-
-            return WorkflowStatus.Success;
-
-            }
-
-        private bool GetApiKey(out string apiKey)
-        {
-            apiKey = _configuration.GetSetting("PipedriveApiKey");
-            if (string.IsNullOrEmpty(apiKey))
-            {
-                _logger.Warn<PipedrivePersonService>("Api token cannot be null or empty");
-            }
-            return true;
-
-        }
-        private string ApiUrl(string path, string apiKey)
-        {
-            const string baseUrl = "https://api.pipedrive.com/v1/";
-
-
-            return $"{baseUrl}{path}?api_token={apiKey}";
+            return leadResult;
         }
     }
 }

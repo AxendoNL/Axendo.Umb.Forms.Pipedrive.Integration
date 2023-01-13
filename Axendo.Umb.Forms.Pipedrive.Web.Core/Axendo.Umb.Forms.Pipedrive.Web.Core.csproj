@@ -274,11 +274,14 @@
     <Compile Include="Models\Responses\PersonResponses\PersonItemList.cs" />
     <Compile Include="Models\Responses\PersonResponses\PersonListRoot.cs" />
     <Compile Include="Models\Responses\PersonResponses\PersonResponse.cs" />
-    <Compile Include="Models\WorkflowStatus.cs" />
+    <Compile Include="Models\PipedriveStatus.cs" />
+    <Compile Include="Models\Responses\PostResult.cs" />
     <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ILeadService.cs" />
     <Compile Include="Services\IPersonService.cs" />
+    <Compile Include="Services\IPipedriveBaseService.cs" />
+    <Compile Include="Services\PipedriveBaseService.cs" />
     <Compile Include="Services\PipedriveLeadService.cs" />
     <Compile Include="Services\PipedrivePersonService.cs" />
     <Compile Include="Workflow\PipedriveWorkflow.cs" />
@@ -295,12 +298,11 @@
   <ItemGroup>
     <Content Include="App_Plugins\UmbracoForms.integrations\Crm\Pipedrive\Lead\pipedrive-field-mapper-template.html" />
     <Content Include="App_Plugins\UmbracoForms.integrations\Crm\Pipedrive\Lead\pipedrive.leadfields.html" />
-    <Content Include="App_Plugins\UmbracoForms.integrations\Crm\Pipedrive\Lead\pipedrive.resource.js" />
     <Content Include="App_Plugins\UmbracoForms.integrations\Crm\Pipedrive\Lead\pipedrivefields.component.js" />
     <Content Include="App_Plugins\UmbracoForms.integrations\Crm\Pipedrive\Person\pipedrive-field-mapper-template.html" />
     <Content Include="App_Plugins\UmbracoForms.integrations\Crm\Pipedrive\Person\pipedrive.personfields.html" />
-    <Content Include="App_Plugins\UmbracoForms.integrations\Crm\Pipedrive\Person\pipedrive.resource.js" />
     <Content Include="App_Plugins\UmbracoForms.integrations\Crm\Pipedrive\Person\pipedrivefields.component.js" />
+    <Content Include="App_Plugins\UmbracoForms.integrations\Crm\Pipedrive\pipedrive.resource.js" />
     <Content Include="img\LeadMapping.png" />
     <Content Include="img\LeadRecord.png" />
     <Content Include="img\PersonFieldMapping.png" />

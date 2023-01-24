@@ -27,11 +27,7 @@ To use this intregration, you need an API key, which you can access by registeri
 
 You need to add the API Key to the Web.config file.
 
-<appSettings>
-  
-  <add key="PipedriveApiKey" value="your key here" />
-
-</appSettings>
+<add key="PipedriveApiKey" value="your key here" />
 
 ### Working with the Umbraco Forms/ Pipedrive integration
 

@@ -19,12 +19,12 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Workflow
         private readonly ILogger _logger;
         private readonly IPersonService _personService;
         private readonly ILeadService _leadService;
-
         public PipedriveWorkflow(ILogger logger, IPersonService personService, ILeadService leadService)
         {
             _logger = logger;
             _personService = personService;
             _leadService = leadService;
+            
 
             Id = new Guid("ff92cdf3-322e-48be-a505-11076662273a");
             Name = "Save Person to Pipedrive";
@@ -34,19 +34,19 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Workflow
             
         }
 
-        [Setting("personField Mappings",
+        [@Setting("personField Mappings",
             Description = "Map form fields to Pipedrive PersonFields",
             View = "~/App_Plugins/UmbracoForms.integrations/Crm/Pipedrive/Person/pipedrive.personfields.html")]
         public string PersonFieldMappings { get; set; }
 
-        [Setting("leadField Mappings",
+        [@Setting("leadField Mappings",
             Description = "Map form fields to Pipedrive PersonFields",
             View = "~/App_Plugins/UmbracoForms.integrations/Crm/Pipedrive/Lead/pipedrive.leadfields.html")]
         public string LeadFieldMappings { get; set; }
 
 
             public override WorkflowExecutionStatus Execute(Record record, RecordEventArgs e)
-        {
+            {
             List<MappedPersonField> mappedPersonFields = JsonConvert.DeserializeObject<List<MappedPersonField>>(PersonFieldMappings);
             
             List<MappedLeadField> mappedLeadFields = JsonConvert.DeserializeObject<List<MappedLeadField>>(LeadFieldMappings);
@@ -60,8 +60,6 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Workflow
                 if (executionStatus.Status == PipedriveStatus.Success)
                 {
                     executionStatus = _leadService.PostLead(record, mappedLeadFields, person.Result.Id).GetAwaiter().GetResult();
-                    
-                    
                 }
                 switch (executionStatus.Status)
                 {
@@ -70,11 +68,11 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Workflow
                     case PipedriveStatus.Failed:
                     case PipedriveStatus.Unknown:
                         _logger.Warn<PipedriveWorkflow>("Failed to execute the workflow {WorkflowName} for {FormName} ({FormId})",
-                                                     Workflow.Name, e.Form.Name, e.Form.Id);
+                                                        Workflow.Name, e.Form.Name, e.Form.Id);
                         return WorkflowExecutionStatus.Failed;
                     case PipedriveStatus.NotConfigured:
                         _logger.Warn<PipedriveWorkflow>("Could not execute the workflow {WorkflowName} for {FormName} ({FormId}), because workflow is not correctly configured",
-                                                     Workflow.Name, e.Form.Name, e.Form.Id);
+                                                        Workflow.Name, e.Form.Name, e.Form.Id);
                         return WorkflowExecutionStatus.NotConfigured;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(executionStatus));
@@ -83,10 +81,11 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Workflow
             else
             {
                 _logger.Warn<PipedriveWorkflow>("Missing Pipedrive field mapping and/or product title for the workflow {WorkflowName} for the form {FormName} ({FormId})",
-                                                 Workflow.Name, e.Form.Name, e.Form.Id);
+                                                    Workflow.Name, e.Form.Name, e.Form.Id);
                 return WorkflowExecutionStatus.NotConfigured;
             }
-        }
+            
+            }
 
         public override List<Exception> ValidateSettings()
         {

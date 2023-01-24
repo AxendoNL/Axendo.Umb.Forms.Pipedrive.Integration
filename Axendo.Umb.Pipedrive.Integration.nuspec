@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>Axendo.Umb.Forms.Pipedrive.Integration</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <authors>Axendo</authors>
     <owners>Axendo</owners>
     <projectUrl>https://github.com/AxendoNL/Axendo.Umb.Forms.Pipedrive.Integration</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>An integration between Umbraco Forms and Pipedrive for submitting data to Pipedrive</description>
-    <releaseNotes><![CDATA[1.0.2 release]]></releaseNotes>
+    <releaseNotes><![CDATA[1.0.3 release]]></releaseNotes>
     <copyright>Copyright 2022</copyright>
     <tags>umbraco, umbraco-cms, pipedrive, umbracoForms</tags>
     <dependencies>

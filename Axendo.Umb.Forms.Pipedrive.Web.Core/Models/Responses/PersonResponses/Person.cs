@@ -12,6 +12,5 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Models.Responses
 
         [JsonProperty("primary_email")]
         public string Email { get; set; }
-
     }
 }

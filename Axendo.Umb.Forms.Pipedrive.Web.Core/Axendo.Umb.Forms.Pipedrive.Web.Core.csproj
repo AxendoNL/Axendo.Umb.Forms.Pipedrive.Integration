@@ -262,6 +262,7 @@
   <ItemGroup>
     <Compile Include="Components\PipedriveComponent.cs" />
     <Compile Include="Composers\PipedriveComposer.cs" />
+    <Compile Include="Configuration\PipedriveSettings.cs" />
     <Compile Include="Controller\PipedriveController.cs" />
     <Compile Include="Models\MappedLeadField.cs" />
     <Compile Include="Models\MappedPersonField.cs" />
@@ -280,7 +281,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ILeadService.cs" />
     <Compile Include="Services\IPersonService.cs" />
-    <Compile Include="Services\IPipedriveBaseService.cs" />
     <Compile Include="Services\PipedriveBaseService.cs" />
     <Compile Include="Services\PipedriveLeadService.cs" />
     <Compile Include="Services\PipedrivePersonService.cs" />

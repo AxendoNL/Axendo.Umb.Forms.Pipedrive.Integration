@@ -8,6 +8,7 @@ using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
 
 
+
 namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Controller
 {
     [PluginController("UmbracoFormsIntegrationsCrmPipedrive")]
@@ -16,7 +17,7 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Controller
     {
         private readonly IPersonService _personService;
         private readonly ILeadService _leadService;
-
+        
         public PipedriveController(IPersonService personService, ILeadService leadService)
         {
             _personService = personService;
@@ -26,13 +27,13 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Controller
         [HttpGet]
         public async Task<IEnumerable<PersonField>> GetAllPersonFields()
         {
-            return await _personService.GetPersonFields();
+           return await _personService.GetPersonFields();
         }
 
         [HttpGet]
         public async Task<IEnumerable<LeadField>> GetAllLeadFields()
         {
-            return await _leadService.GetLeadFields();
+           return await _leadService.GetLeadFields();
         }
     }
 }

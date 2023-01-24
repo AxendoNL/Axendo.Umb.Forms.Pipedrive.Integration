@@ -11,7 +11,7 @@ namespace Axendo.Umb.Forms.Pipedrive.Web.Core.Composers
         {
             composition.Register<IPersonService, PipedrivePersonService>(Lifetime.Singleton);
             composition.Register<ILeadService, PipedriveLeadService>(Lifetime.Singleton);
-            composition.Register<IPipedriveBaseService, PipedriveBaseService>(Lifetime.Singleton);
+           
 
             composition.Components().Append<PipedriveComponent>();
             

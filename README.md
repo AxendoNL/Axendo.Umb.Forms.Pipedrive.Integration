@@ -25,9 +25,13 @@ You can download the NuGet Package from https://www.nuget.org/packages/Axendo.Um
 
 To use this intregration, you need an API key, which you can access by registering a Pipedrive account and can create and copy the key via Company settings > Personal preferences > API.
 
-You need to add the API Key to the UmbracoForms.config file.
+You need to add the API Key to the Web.config file.
 
-<setting key=""PipedriveApiKey"" value="<your key here" />
+<appSettings>
+  
+  <add key="PipedriveApiKey" value="your key here" />
+
+</appSettings>
 
 ### Working with the Umbraco Forms/ Pipedrive integration
 

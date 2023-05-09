@@ -1,0 +1,9 @@
+﻿{
+  "css": [ "" ],
+  "javascript": [
+    "~/App_Plugins/Axendo.Umbraco.Forms.Pipedrive/Person/pipedrivefields.component.js",
+    "~/App_Plugins/Axendo.Umbraco.Forms.Pipedrive/Lead/pipedrivefields.component.js",
+    "~/App_Plugins/Axendo.Umbraco.Forms.Pipedrive/pipedrive.resource.js"
+
+  ]
+}

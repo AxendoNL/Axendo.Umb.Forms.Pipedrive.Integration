@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>Axendo.Umbraco.Forms.Pipedrive.Integration.Core</id>
+    <version>2.0.1</version>
+    <authors>Axendo</authors>
+    <owners>Axendo</owners>
+    <projectUrl>https://github.com/AxendoNL/Axendo.Umbraco.Forms.Pipedrive.Integration.Core</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>An integration between Umbraco Forms and Pipedrive for submitting data to Pipedrive - Core</description>
+    <releaseNotes><![CDATA[2.0.1 release]]></releaseNotes>
+    <copyright>Copyright 2022-2023</copyright>
+    <tags>umbraco, umbraco-cms, pipedrive, umbracoForms</tags>
+    <dependencies>
+        <dependency id="Umbraco.Cms.Core" version="[10.0.0,11.0.0)"/>
+        <dependency id="Umbraco.Cms.Web.BackOffice" version="[10.0.0,11.0.0)"/>
+        <dependency id="Umbraco.Forms.Core" version="[10.0.0,11.0.0)"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Axendo.Umbraco.Forms.Pipedrive.Integration.Core\bin\release\net6.0\Axendo.Umbraco.Forms.Pipedrive.Integration.Core.dll" target="lib\net6.0" />
+  </files>
+</package>

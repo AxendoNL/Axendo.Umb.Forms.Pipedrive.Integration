@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axendo.Umb.Forms.Pipedrive.Web.Core", "Axendo.Umb.Forms.Pipedrive.Web.Core\Axendo.Umb.Forms.Pipedrive.Web.Core.csproj", "{12CA941F-CC84-4C4C-B5E1-B831566E31BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axendo.Umbraco.Forms.Pipedrive.Integration.Core", "Axendo.Umbraco.Forms.Pipedrive.Integration.Core\Axendo.Umbraco.Forms.Pipedrive.Integration.Core.csproj", "{12CA941F-CC84-4C4C-B5E1-B831566E31BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -12,6 +12,7 @@
     <copyright>Copyright 2022-2023</copyright>
     <tags>umbraco, umbraco-cms, pipedrive, umbracoForms</tags>
     <dependencies>
+        <dependency id="Microsoft.AspNet.WebApi.Client" version="[5.2.9,5.3.0)"/>
         <dependency id="Umbraco.Cms.Core" version="[10.0.0,11.0.0)"/>
         <dependency id="Umbraco.Cms.Web.BackOffice" version="[10.0.0,11.0.0)"/>
         <dependency id="Umbraco.Forms.Core" version="[10.0.0,11.0.0)"/>

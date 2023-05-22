@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
 using Axendo.Umbraco.Forms.Pipedrive.Core.Models;
 using Axendo.Umbraco.Forms.Pipedrive.Core.Models.Responses;
 using Microsoft.Extensions.Configuration;
@@ -28,9 +24,18 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Services
 
             string url = ApiUrl("personFields");
             HttpResponseMessage response = await _httpClient.GetAsync(new Uri(url));
+
+            if (response is null)
+            {
+                logger.LogError("Failed to get Pipedrive PersonFields. {Message}", "<unknown>");
+
+                return Enumerable.Empty<PersonField>();
+            }
+
+            string? result = await response.Content.ReadAsStringAsync();
+            
             if (response.IsSuccessStatusCode)
             {
-                string result = await response.Content.ReadAsStringAsync();
                 PersonFieldsResponse? personFieldsJson = JsonConvert.DeserializeObject<PersonFieldsResponse>(result);
                 if (personFieldsJson is not null)
                 {
@@ -39,7 +44,7 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Services
             }
             else if (response.IsSuccessStatusCode == false)
             {
-                logger.LogError("Failed to get Personfields for the url, {statusCode}", response.StatusCode);
+                logger.LogError("Failed to get Pipedrive PersonFields. {Message}", $"{response.StatusCode} {response.ReasonPhrase} - {result}");
 
                 return Enumerable.Empty<PersonField>();
             }
@@ -79,10 +84,10 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Services
             {
                 string? url = ApiUrl("persons");
                 HttpResponseMessage? response = await _httpClient.PostAsJsonAsync(url, data).ConfigureAwait(false);
-
+                
                 if (response is null)
                 {
-                    logger.LogError("Error submitting a Pipedrive person request. {Message}", "<unknown>");
+                    logger.LogError("Error submitting a Pipedrive Persons request. {Message}", "<unknown>");
                     personResult.Status = PipedriveStatus.Failed;
 
                     return personResult;
@@ -92,7 +97,7 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Services
 
                 if (response.IsSuccessStatusCode == false)
                 {
-                    logger.LogError("Error submitting a Pipedrive person request. {Message}", $"{response.ReasonPhrase} - {result}");
+                    logger.LogError("Error submitting a Pipedrive Persons request. {Message}", $"{response.StatusCode} {response.ReasonPhrase} - {result}");
                     personResult.Status = PipedriveStatus.Failed;
 
                     return personResult;
@@ -119,7 +124,7 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Services
         {
             if (email == null)
             {
-                logger.LogError("Failed to get persons for the email, {statusCode}", "-");
+                logger.LogError("Failed to get Pipedrive Persons by email. {Message}", "No email provided");
 
                 return Enumerable.Empty<PersonItem>();
             }
@@ -135,16 +140,18 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Services
 
             string? url = SetupApiUrlWithQueryParams("persons/search", queryParams);
             HttpResponseMessage? response = await _httpClient.GetAsync(url).ConfigureAwait(false);
-
+            
             if (response is null)
             {
-                logger.LogError("Failed to get persons for the url, {statusCode}", "-");
+                logger.LogError("Failed to get Pipedrive Persons by email. {Message}", "<unknown>");
 
                 return Enumerable.Empty<PersonItem>();
             }
-            else if (response.IsSuccessStatusCode)
+
+            string? result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
             {
-                string result = await response.Content.ReadAsStringAsync();
                 PersonListRoot? personJson = JsonConvert.DeserializeObject<PersonListRoot>(result);
                 if (personJson is not null)
                 {
@@ -153,7 +160,7 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Services
             }
             else if (response.IsSuccessStatusCode == false)
             {
-                logger.LogError("Failed to get persons for the url, {statusCode}", response.StatusCode);
+                logger.LogError("Failed to get Pipedrive Persons by email. {Message}", $"{response.StatusCode} {response.ReasonPhrase} - {result}");
 
                 return Enumerable.Empty<PersonItem>();
             }

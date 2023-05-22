@@ -39,7 +39,7 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Workflow
         public string PersonFieldMappings { get; set; } = string.Empty;
 
         [@Setting("leadField Mappings",
-            Description = "Map form fields to Pipedrive PersonFields",
+            Description = "Map form fields to Pipedrive LeadFields",
             View = "~/App_Plugins/Axendo.Umbraco.Forms.Pipedrive/Lead/pipedrive.leadfields.html")]
         public string LeadFieldMappings { get; set; } = string.Empty;
 

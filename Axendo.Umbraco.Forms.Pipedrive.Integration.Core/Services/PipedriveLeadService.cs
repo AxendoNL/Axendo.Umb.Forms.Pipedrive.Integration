@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
 using Axendo.Umbraco.Forms.Pipedrive.Core.Models;
 using Axendo.Umbraco.Forms.Pipedrive.Core.Models.Responses;
 using Axendo.Umbraco.Forms.Pipedrive.Core.Models.Responses.LeadResponses;
@@ -30,9 +25,18 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Services
 
             string url = ApiUrl("dealFields");
             HttpResponseMessage response = await _httpClient.GetAsync(new Uri(url));
+
+            if (response is null)
+            {
+                logger.LogError("Failed to get Pipedrive LeadFields. {Message}", "<unknown>");
+
+                return Enumerable.Empty<LeadField>();
+            }
+
+            string? result = await response.Content.ReadAsStringAsync();
+            
             if (response.IsSuccessStatusCode)
             {
-                string result = await response.Content.ReadAsStringAsync();
                 LeadFieldsResponse? personFieldsJson = JsonConvert.DeserializeObject<LeadFieldsResponse>(result);
                 if (personFieldsJson is not null)
                 {
@@ -41,7 +45,7 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Services
             }
             else if (response.IsSuccessStatusCode == false)
             {
-                logger.LogError("Failed to get LeadField for the url, {statusCode}", response.StatusCode);
+                logger.LogError("Failed to get Pipedrive LeadFields. {Message}", $"{response.StatusCode} {response.ReasonPhrase} - {result}");
 
                 return Enumerable.Empty<LeadField>();
             }
@@ -78,14 +82,17 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Services
 
             if (response is null)
             {
-                logger.LogError("Error submitting a Pipedrive person request. {Statuscode}, {Message}", "-", "<unknown>");
+                logger.LogError("Error submitting a Pipedrive Leads request. {Message}", "<unknown>");
                 leadResult.Status = PipedriveStatus.Failed;
 
                 return leadResult;
             }
-            else if (response.IsSuccessStatusCode == false)
+
+            string? result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode == false)
             {
-                logger.LogError("Error submitting a Pipedrive person request. {Statuscode}, {Message}", response.StatusCode, response.ReasonPhrase);
+                logger.LogError("Error submitting a Pipedrive Leads request. {Message}", $"{response.StatusCode} {response.ReasonPhrase} - {result}");
                 leadResult.Status = PipedriveStatus.Failed;
 
                 return leadResult;

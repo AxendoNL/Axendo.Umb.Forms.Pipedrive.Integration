@@ -1,9 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axendo.Umbraco.Forms.Pipedrive.Integration.Core", "Axendo.Umbraco.Forms.Pipedrive.Integration.Core\Axendo.Umbraco.Forms.Pipedrive.Integration.Core.csproj", "{12CA941F-CC84-4C4C-B5E1-B831566E31BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axendo.Umbraco.Forms.Pipedrive.Integration", "Axendo.Umbraco.Forms.Pipedrive.Integration\Axendo.Umbraco.Forms.Pipedrive.Integration.csproj", "{AED4DCC0-02FB-4301-A429-A8150FA71B72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +16,10 @@ Global
 		{12CA941F-CC84-4C4C-B5E1-B831566E31BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12CA941F-CC84-4C4C-B5E1-B831566E31BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12CA941F-CC84-4C4C-B5E1-B831566E31BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AED4DCC0-02FB-4301-A429-A8150FA71B72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AED4DCC0-02FB-4301-A429-A8150FA71B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AED4DCC0-02FB-4301-A429-A8150FA71B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AED4DCC0-02FB-4301-A429-A8150FA71B72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

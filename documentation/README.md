@@ -36,27 +36,27 @@ You need to add the API Key to the Web.config file.
 
 You can configure the Umbraco Forms by adding the "Save Person to Pipedrive" workflow to the form.
 
-![Workflow](documentation/images/Workflow.png?raw=true "Title")
+![Workflow](images/Workflow.png?raw=true "Title")
 
 #### Pipedrive PersonField mapping
 
 You can configure the mappings between the FormField and the Pipedrive PersonField. It is possible to add custom person data fields in Pipedrive. These will also show up as
 a personfield which you can map with the FormField.
 
-![Personfield mapping](documentation/images/PersonFieldMapping.png?raw=true "Title")
+![Personfield mapping](images/PersonFieldMapping.png?raw=true "Title")
 
 #### Pipedrive LeadField mapping
 
 You can configure the mappings between the FormField and the Pipedrive Leadfield. A title field is required in the form to add a lead in Pipedrive.
 You need to map this with the title leadField. If you want to add custom data fields that are not person specific like "Message", you can better add this as a custom lead field. 
 
-![Personfield mapping](documentation/images/LeadMapping.png?raw=true "Title")
+![Personfield mapping](images/LeadMapping.png?raw=true "Title")
 
 #### Required form fields
 
 Like I mentioned before when creating a Form, you are required to add a title field in order to add a lead to a specific person record.
 
-![Example Form](documentation/images/RequiredFormField.png?raw=true "Title")
+![Example Form](images/RequiredFormField.png?raw=true "Title")
 
 #### Form submission
 
@@ -64,11 +64,11 @@ When a form is submitted on the website, the workflow will execute and create a 
 
 ##### Person Record
 
-![PersonRecord](documentation/images/PersonRecord.png?raw=true "Title")
+![PersonRecord](images/PersonRecord.png?raw=true "Title")
 
 ##### Lead Record
 
-![LeadRecord](documentation/images/LeadRecord.png?raw=true "Title")
+![LeadRecord](images/LeadRecord.png?raw=true "Title")
 
 
 

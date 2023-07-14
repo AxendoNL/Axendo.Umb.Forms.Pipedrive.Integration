@@ -1,0 +1,27 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<PipedrivePropertyEditorFilesPath>
+			$(MSBuildThisFileDirectory)..\App_Plugins\Axendo.Umbraco.Forms.Pipedrive\**\*.*
+		</PipedrivePropertyEditorFilesPath>
+	</PropertyGroup>
+    
+	<Target Name="CopyPipedriveEditorAssets" BeforeTargets="Build">
+		<ItemGroup>
+			<PipedrivePropertyEditorFiles Include="$(PipedrivePropertyEditorFilesPath)" />
+		</ItemGroup>
+		<Message
+			Text="Copying Pipedrive Property Editor files: $(PipedrivePropertyEditorFilesPath) - #@(PipedrivePropertyEditorFiles->Count()) files"
+			Importance="high" />
+		<Copy SourceFiles="@(PipedrivePropertyEditorFiles)"
+		      DestinationFiles="@(PipedrivePropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\Axendo.Umbraco.Forms.Pipedrive\%(RecursiveDir)%(Filename)%(Extension)')"
+		      SkipUnchangedFiles="true" />
+	</Target>
+	
+	<Target Name="ClearPipedrivePropertyEditorAssets" BeforeTargets="Clean">
+		<ItemGroup>
+			<PipedrivePropertyEditorFolder Include="$(MSBuildProjectDirectory)\App_Plugins\Axendo.Umbraco.Forms.Pipedrive\" />
+		</ItemGroup>
+		<Message Text="Clear old Pipedrive Property Editor data"  Importance="high" />
+		<RemoveDir Directories="@(PipedrivePropertyEditorFolder)"  />
+	</Target>
+</Project>

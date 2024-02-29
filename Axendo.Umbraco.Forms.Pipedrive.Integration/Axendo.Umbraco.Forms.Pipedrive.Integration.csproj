@@ -1,30 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>$(AssemblyName)</PackageId>
     <Title>Umbraco Froms integrations by Axendo: Pipedrive</Title>
-    <VersionPrefix>2.0.1</VersionPrefix>
+    <VersionPrefix>3.0.0</VersionPrefix>
     <VersionSuffix>-beta</VersionSuffix>
     <Version>$(VersionPrefix)$(VersionSuffix)</Version>
     <Authors>Axendo HQ</Authors>
     <Company>Axendo</Company>
     <Description>An integration between Umbraco Forms and Pipedrive for submitting data to Pipedrive.</Description>
-    <Copyright>Copyright © 2022-2023</Copyright>
+    <Copyright>Copyright © 2022-2024</Copyright>
     <PackageProjectUrl>https://github.com/AxendoNL/Axendo.Umb.Forms.Pipedrive.Integration/tree/v2/documentation</PackageProjectUrl>
     <PackageIcon>axendo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/AxendoNL/Axendo.Umb.Forms.Pipedrive.Integration/tree/v2/Axendo.Umbraco.Forms.Pipedrive.Integration/App_Plugins/Axendo.Umbraco.Forms.Pipedrive</RepositoryUrl>
     <PackageTags>umbraco, umbraco-cms, pipedrive, umbracoForms</PackageTags>
-    <PackageReleaseNotes>Made compatible with Umbraco 10 and .Net 6.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Made compatible with Umbraco 13 and .Net 8.0</PackageReleaseNotes>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net60'">
-    <!-- Accepts 2.0 up to 2.x, but not 3.0 and higher. Will resolve to the smallest acceptable stable version.-->
-    <PackageReference Include="Axendo.Umbraco.Forms.Pipedrive.Integration.Core" Version="[2.0.0,3.0.0)" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net80'">
+    <!-- Accepts 3.0 up to 3.x, but not 4.0 and higher. Will resolve to the smallest acceptable stable version.-->
+    <PackageReference Include="Axendo.Umbraco.Forms.Pipedrive.Integration.Core" Version="[3.0.0,4.0.0)" />
   </ItemGroup>
   
   <ItemGroup>

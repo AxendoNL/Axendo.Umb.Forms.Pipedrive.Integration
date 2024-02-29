@@ -2,9 +2,6 @@
 using Axendo.Umbraco.Forms.Pipedrive.Core.Models;
 using Axendo.Umbraco.Forms.Pipedrive.Core.Models.Responses;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Umbraco.Forms.Core;
 using Microsoft.Extensions.Logging;
 using Umbraco.Forms.Core.Attributes;
@@ -32,18 +29,17 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Workflow
             Icon = "icon-handshake";
             Group = "CRM";
         }
-
-        [@Setting("personField Mappings",
+        [Setting("personField Mappings",
             Description = "Map form fields to Pipedrive PersonFields",
             View = "~/App_Plugins/Axendo.Umbraco.Forms.Pipedrive/Person/pipedrive.personfields.html")]
         public string PersonFieldMappings { get; set; } = string.Empty;
 
-        [@Setting("leadField Mappings",
+        [Setting("leadField Mappings",
             Description = "Map form fields to Pipedrive LeadFields",
             View = "~/App_Plugins/Axendo.Umbraco.Forms.Pipedrive/Lead/pipedrive.leadfields.html")]
         public string LeadFieldMappings { get; set; } = string.Empty;
 
-        public override WorkflowExecutionStatus Execute(WorkflowExecutionContext context)
+        public override Task<WorkflowExecutionStatus> ExecuteAsync(WorkflowExecutionContext context)
         {// RecordEventArgs e
             Form form = context.Form;
             Record record = context.Record;
@@ -64,16 +60,16 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Workflow
                 switch (executionStatus.Status)
                 {
                     case PipedriveStatus.Success:
-                        return WorkflowExecutionStatus.Completed;
+                        return Task.FromResult(WorkflowExecutionStatus.Completed);
                     case PipedriveStatus.Failed:
                     case PipedriveStatus.Unknown:
                         _logger.LogWarning("Failed to execute the workflow {WorkflowName} for {FormName} ({FormId})",
                                                         Workflow?.Name ?? "<unknown>", form.Name, form.Id);
-                        return WorkflowExecutionStatus.Failed;
+                        return Task.FromResult(WorkflowExecutionStatus.Failed);
                     case PipedriveStatus.NotConfigured:
                         _logger.LogWarning("Could not execute the workflow {WorkflowName} for {FormName} ({FormId}), because workflow is not correctly configured",
                                                         Workflow?.Name ?? "<unknown>", form.Name, form.Id);
-                        return WorkflowExecutionStatus.NotConfigured;
+                        return Task.FromResult(WorkflowExecutionStatus.NotConfigured);
                     default:
                         throw new ArgumentOutOfRangeException(nameof(executionStatus));
                 }
@@ -82,7 +78,7 @@ namespace Axendo.Umbraco.Forms.Pipedrive.Core.Workflow
             {
                 _logger.LogWarning("Missing Pipedrive field mapping and/or product title for the workflow {WorkflowName} for the form {FormName} ({FormId})",
                                                     Workflow?.Name ?? "<unknown>", form.Name, form.Id);
-                return WorkflowExecutionStatus.NotConfigured;
+                return Task.FromResult(WorkflowExecutionStatus.NotConfigured);
             }
         }
 
